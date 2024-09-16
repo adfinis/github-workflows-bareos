@@ -9,6 +9,6 @@ on:
 
 jobs:
   semantic-release:
-    uses: adfinis/github-workflows-bareos/.github/workflows/ansible-role.yaml@main
+    uses: adfinis/github-workflows-bareos/.github/workflows/semantic-release.yaml@main
     secrets:
       ADFINISBOT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
