@@ -1,0 +1,80 @@
+---
+name: Run Molecule
+
+on:
+  workflow_call:
+    inputs:
+      systems:
+        required: false
+        type: string
+        default: |
+          {
+            "config": [
+              {
+                "image": "debian",
+                "tag": "bookworm"
+              },
+              {
+                "image": "debian",
+                "tag": "bullseye"
+              },
+              {
+                "image": "fedora",
+                "tag": "40"
+              },
+              {
+                "image": "fedora",
+                "tag": "39"
+              },
+              {
+                "image": "ubuntu",
+                "tag": "noble"
+              },
+              {
+                "image": "ubuntu",
+                "tag": "jammy"
+              }
+            ]
+          }
+
+
+jobs:
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: ansible-lint
+        uses: ansible-community/ansible-lint-action@main
+  test:
+    needs:
+      - lint
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(inputs.systems) }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: disable apparmor for mysql
+        run: sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/
+
+      - name: parse apparmor for mysql
+        run: sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
+
+      - name: Set up Python 3.
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: molecule
+        run: molecule test
+        env:
+          image: ${{ matrix.config.image }}
+          tag: ${{ matrix.config.tag }}
