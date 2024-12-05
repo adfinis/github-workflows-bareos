@@ -20,7 +20,7 @@ on:
               },
               {
                 "image": "fedora",
-                "tag": "40"
+                "tag": "latest"
               },
               {
                 "image": "fedora",
@@ -28,7 +28,7 @@ on:
               },
               {
                 "image": "ubuntu",
-                "tag": "noble"
+                "tag": "latest"
               },
               {
                 "image": "ubuntu",
