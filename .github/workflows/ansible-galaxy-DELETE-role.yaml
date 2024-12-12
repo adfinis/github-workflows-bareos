@@ -9,7 +9,7 @@ on:
         required: true
 
 jobs:
-  release:
+  delete:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the codebase
@@ -23,7 +23,7 @@ jobs:
       - name: Install Ansible
         run: pip3 install ansible-core
 
-      - name: Trigger a new import on Galaxy
+      - name: Delete Ansible role from Galaxy
         run: >-
           ansible-galaxy role delete
           --api-key ${{ secrets.galaxy_api_key }}
