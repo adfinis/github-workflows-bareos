@@ -12,6 +12,10 @@ on:
             "config": [
               {
                 "image": "debian",
+                "tag": "trixie"
+              },
+              {
+                "image": "debian",
                 "tag": "bookworm"
               },
               {
