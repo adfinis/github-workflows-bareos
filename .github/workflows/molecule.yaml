@@ -44,7 +44,7 @@ on:
 jobs:
   lint:
     name: Ansible Lint
-    runs-on: ubuntu-25.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Run ansible-lint
@@ -53,7 +53,7 @@ jobs:
   test:
     needs:
       - lint
-    runs-on: ubuntu-25.04
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(inputs.systems) }}
