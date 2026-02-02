@@ -45,7 +45,7 @@ on:
 jobs:
   lint:
     name: Ansible Lint
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Run ansible-lint
@@ -53,13 +53,15 @@ jobs:
   test:
     needs:
       - lint
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(inputs.systems) }}
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
+        with:
+          path: "${{ github.repository }}"
 
       - name: disable apparmor for mysql
         run: sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/
