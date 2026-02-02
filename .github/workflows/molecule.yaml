@@ -60,6 +60,8 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v5
+        with:
+          path: "${{ github.repository }}"
 
       - name: disable apparmor for mysql
         run: sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/
@@ -78,7 +80,9 @@ jobs:
           pip install -r ${{ github.repository }}/requirements.txt
 
       - name: molecule
-        run: molecule test
+        run: |
+          cd ${{ github.repository }}
+          molecule test
         env:
           image: ${{ matrix.config.image }}
           tag: ${{ matrix.config.tag }}
