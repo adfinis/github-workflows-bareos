@@ -54,6 +54,8 @@ jobs:
     needs:
       - lint
     runs-on: ubuntu-latest
+    container:
+      image: python:3.13
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(inputs.systems) }}
@@ -63,26 +65,15 @@ jobs:
         with:
           path: "${{ github.repository }}"
 
-      - name: disable apparmor for mysql
-        run: sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/
-
-      - name: parse apparmor for mysql
-        run: sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
-
-      - name: Set up Python 3.
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r ${{ github.repository }}/requirements.txt
 
-      - name: molecule
-        run: |
-          cd ${{ github.repository }}
-          molecule test
+      - name: molecule 
+        uses: gofrolist/molecule-action@v2
+        with:
+          molecule_command: test
         env:
           image: ${{ matrix.config.image }}
           tag: ${{ matrix.config.tag }}
