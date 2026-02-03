@@ -12,7 +12,7 @@ on:
             "config": [
               {
                 "image": "debian",
-                "tag": "trixie"
+                "tag": "latest"
               },
               {
                 "image": "debian",
