@@ -28,7 +28,7 @@ on:
               },
               {
                 "image": "fedora",
-                "tag": "40"
+                "tag": "41"
               },
               {
                 "image": "ubuntu",
