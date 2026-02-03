@@ -4,50 +4,27 @@ name: Run Molecule
 on:
   workflow_call:
     inputs:
-      systems:
+      distros:
         required: false
         type: string
         default: |
-          {
-            "config": [
-              {
-                "image": "debian",
-                "tag": "latest"
-              },
-              {
-                "image": "debian",
-                "tag": "bookworm"
-              },
-              {
-                "image": "debian",
-                "tag": "bullseye"
-              },
-              {
-                "image": "fedora",
-                "tag": "latest"
-              },
-              {
-                "image": "fedora",
-                "tag": "41"
-              },
-              {
-                "image": "ubuntu",
-                "tag": "latest"
-              },
-              {
-                "image": "ubuntu",
-                "tag": "jammy"
-              }
-            ]
-          }
-
+          [
+            "debian13",
+            "debian12",
+            "debian11",
+            "fedora42",
+            "ubuntu2404",
+            "ubuntu2204",
+            "rockylinux9",
+            "rockylinux10"
+          ]
 
 jobs:
   lint:
     name: Ansible Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Run ansible-lint
         uses: ansible/ansible-lint@main
   test:
@@ -55,10 +32,11 @@ jobs:
       - lint
     runs-on: ubuntu-latest
     container:
-      image: python:3.13
+      image: python:3.13  # can't go to 3.14+ until ansible 13
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(inputs.systems) }}
+      matrix:
+        distro: ${{ fromJSON(inputs.distros) }}
     steps:
       - name: checkout
         uses: actions/checkout@v5
@@ -70,10 +48,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r ${{ github.repository }}/requirements.txt
 
-      - name: molecule 
+      - name: Run molecule
         uses: gofrolist/molecule-action@v2
         with:
           molecule_command: test
         env:
-          image: ${{ matrix.config.image }}
-          tag: ${{ matrix.config.tag }}
+          image: ${{ matrix.distro }}
