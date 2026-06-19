@@ -49,7 +49,7 @@ jobs:
           pip install -r ${{ github.repository }}/requirements.txt
 
       - name: Run molecule
-        uses: gofrolist/molecule-action@e478c779d800afb09a85aee11bfa52c7223b5120 # v2.7.93
+        uses: gofrolist/molecule-action@1457f874b26ffdb758b4000f6fffdd5365df6a65 # v2.7.101
         with:
           molecule_command: test
         env:
