@@ -11,4 +11,5 @@ jobs:
   semantic-release:
     uses: ./.github/workflows/semantic-release.yaml
     secrets:
-      ADFINISBOT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ADFINIS_RELEASES_GITHUB_CLIENT_ID: ${{ secrets.ADFINIS_RELEASES_GITHUB_CLIENT_ID }}
+      ADFINIS_RELEASES_GITHUB_APP_PRIVATE_KEY: ${{ secrets.ADFINIS_RELEASES_GITHUB_APP_PRIVATE_KEY }}
